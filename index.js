@@ -1,8 +1,7 @@
 const prettier = require("prettier");
 const MASK_PREFIX = "ssmask";
 const MASK_SUFFIX = "ksams";
-const SS_TAG_REGEX = /<%--.*?--%>|<%.*?%>|
-\{\$.*?\}|\$[\w.]+(?:\(.*?\))?/gs;
+const SS_TAG_REGEX = /<%--.*?--%>|<%.*?%>|\{\$.*?\}|\$[\w.]+(?:\(.*?\))?/gs;
 
 function mask(text) {
   const masks = [];
