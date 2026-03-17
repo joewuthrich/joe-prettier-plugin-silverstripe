@@ -1,6 +1,8 @@
 const prettier = require("prettier");
 const MASK_PREFIX = "ssmask";
 const MASK_SUFFIX = "ksams";
+const VAR_PREFIX = "ssv";
+const VAR_SUFFIX = "v";
 const SS_TAG_REGEX = /<%--.*?--%>|<%.*?%>|\{\$.*?\}|\$[\w.]+(?:\(.*?\))?/gs;
 
 function mask(text) {
@@ -10,7 +12,7 @@ function mask(text) {
     if (maskMap.has(match)) {
       return maskMap.get(match);
     }
-    const placeholder = match.startsWith("$") ? `ssv${masks.length}v` : `${MASK_PREFIX}${masks.length}${MASK_SUFFIX}`;
+    const placeholder = match.startsWith("$") ? `${VAR_PREFIX}${masks.length}${VAR_SUFFIX}` : `${MASK_PREFIX}${masks.length}${MASK_SUFFIX}`;
     masks.push(match);
     maskMap.set(match, placeholder);
     return placeholder;
@@ -29,7 +31,7 @@ function mask(text) {
 function unmask(text, masks) {
   if (!masks) return text;
   return text.replace(
-    new RegExp(`${MASK_PREFIX}(\d+)${MASK_SUFFIX}|ssv(\d+)v`, "g"),
+    new RegExp(`${MASK_PREFIX}(\\d+)${MASK_SUFFIX}|${VAR_PREFIX}(\\d+)${VAR_SUFFIX}`, "g"),
     (match, index1, index2) => {
       const index = index1 !== undefined ? index1 : index2;
       return masks[parseInt(index, 10)];
